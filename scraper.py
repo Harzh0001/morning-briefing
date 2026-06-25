@@ -8,6 +8,11 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
+TWILIO_FROM_NUMBER = os.environ.get("TWILIO_FROM_NUMBER", "").strip() # e.g., whatsapp:+14155238886
+WHATSAPP_TO_NUMBER = os.environ.get("WHATSAPP_TO_NUMBER", "").strip() # e.g., whatsapp:+1234567890
+
 # 2. Curated Technical Information Targets
 FEEDS = [
     "https://rss.arxiv.org/rss/cs.LG", # Advanced Machine Learning Research
@@ -80,8 +85,31 @@ def send_telegram_message(text):
         except Exception as e:
             print(f"Failed to transmit payload node: {e}")
 
+def send_whatsapp_message(text):
+    print("Pushing payload to WhatsApp gateway...")
+    url = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json"
+    
+    # WhatsApp limits are ~1600 chars
+    if len(text) > 1600:
+        chunks = [text[i:i+1600] for i in range(0, len(text), 1600)]
+    else:
+        chunks = [text]
+        
+    for chunk in chunks:
+        payload = {
+            "From": TWILIO_FROM_NUMBER,
+            "To": WHATSAPP_TO_NUMBER,
+            "Body": chunk
+        }
+        try:
+            # Twilio uses form data and basic auth
+            res = requests.post(url, data=payload, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
+            res.raise_for_status()
+        except Exception as e:
+            print(f"Failed to transmit WhatsApp node: {e}")
+
 if __name__ == "__main__":
-    if not all([TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, LLM_API_KEY]):
+    if not all([TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, LLM_API_KEY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, WHATSAPP_TO_NUMBER]):
         print("Critical System Invalidation: Environment variables missing.")
         exit(1)
         
@@ -89,6 +117,7 @@ if __name__ == "__main__":
     if raw_news:
         final_report = generate_report(raw_news)
         send_telegram_message(final_report)
+        send_whatsapp_message(final_report)
         print("Success! Morning intelligence briefing deployed.")
     else:
         print("Processing halted: No upstream articles retrieved.")
