@@ -4,9 +4,9 @@ import feedparser
 from google import genai
 
 # 1. Environment Injection Validation
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
-LLM_API_KEY = os.environ.get("LLM_API_KEY")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 
 # 2. Curated Technical Information Targets
 FEEDS = [
