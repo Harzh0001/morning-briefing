@@ -15,11 +15,18 @@ WHATSAPP_TO_NUMBER = os.environ.get("WHATSAPP_TO_NUMBER", "").strip() # e.g., wh
 
 def fetch_live_news():
     print("Initializing NewsAPI ingestion...")
-    url = f"https://newsapi.org/v2/everything?q=(artificial intelligence OR machine learning OR autonomous agents OR AI)&sortBy=publishedAt&language=en&pageSize=100&apiKey={NEWS_API_KEY}"
+    url = "https://newsapi.org/v2/everything"
+    params = {
+        "q": "artificial intelligence OR machine learning OR autonomous agents",
+        "sortBy": "popularity",  # Use popularity instead of publishedAt to get REAL, reliable sources!
+        "language": "en",
+        "pageSize": 100,
+        "apiKey": NEWS_API_KEY
+    }
     
     scraped_articles = []
     try:
-        response = requests.get(url)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
         
@@ -52,16 +59,18 @@ His engineering focus and specific interests include:
 - Practical applications of how AI can be helpful in day-to-day life.
 - Advanced Machine Learning, FinTech Quantitative Analytics, and Deep Learning in Healthcare.
 
-Review this raw text batch of news articles:
+CRITICAL INSTRUCTION: You must ONLY select articles from the raw text batch provided below. DO NOT invent, hallucinate, or make up your own articles. If you make up an article, the system will fail.
+
+Review this raw text batch of real news articles:
 {raw_text}
 
-Perform semantic matching. Select EXACTLY the top 10 entries that align directly with his interests.
+Perform semantic matching. Select EXACTLY the top 10 most relevant entries from the list above.
 For each matched node, output:
 1. A bolded clean title
-2. A precise, single-sentence summary explaining the practical implication or invention
+2. A detailed, informative summary (3-4 sentences long) that provides in-depth knowledge about the article, the specific invention, or the practical implication. Do not give short summaries.
 3. The absolute URL source link (CRITICAL: You MUST copy the exact 'Link:' string provided in the raw text above. Do not invent links).
 
-Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 summaries.
+Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 detailed summaries.
 """
     
     response = client.models.generate_content(
