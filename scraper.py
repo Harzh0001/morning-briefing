@@ -1,40 +1,37 @@
 import os
 import requests
-import feedparser
 from google import genai
 
 # 1. Environment Injection Validation
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
+NEWS_API_KEY = os.environ.get("NEWS_API_KEY", "").strip()
 
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
 TWILIO_FROM_NUMBER = os.environ.get("TWILIO_FROM_NUMBER", "").strip() # e.g., whatsapp:+14155238886
 WHATSAPP_TO_NUMBER = os.environ.get("WHATSAPP_TO_NUMBER", "").strip() # e.g., whatsapp:+1234567890
 
-# 2. Curated Technical Information Targets
-FEEDS = [
-    "https://rss.arxiv.org/rss/cs.LG", # Advanced Machine Learning Research
-    "https://techcrunch.com/category/artificial-intelligence/feed/", # Industrial GenAI Shift
-    "https://www.biomedcentral.com/journals/rss" # Medical Image Classification
-]
-
 def fetch_live_news():
-    print("Initializing multi-source ingestion...")
+    print("Initializing NewsAPI ingestion...")
+    url = f"https://newsapi.org/v2/everything?q=(artificial intelligence OR machine learning OR autonomous agents OR AI)&sortBy=publishedAt&language=en&pageSize=100&apiKey={NEWS_API_KEY}"
+    
     scraped_articles = []
-    for url in FEEDS:
-        try:
-            feed = feedparser.parse(url)
-            # Restrict target ingestion to top 10 latest nodes to manage context limits
-            for entry in feed.entries[:10]: 
-                scraped_articles.append({
-                    "title": entry.title,
-                    "link": entry.link,
-                    "summary": entry.get("summary", "")[:300] # Truncate noise early
-                })
-        except Exception as e:
-            print(f"Ingestion failure on target {url}: {e}")
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        
+        for article in data.get("articles", []):
+            scraped_articles.append({
+                "title": article.get("title"),
+                "link": article.get("url"),
+                "summary": str(article.get("description", ""))[:300]
+            })
+    except Exception as e:
+        print(f"Ingestion failure from NewsAPI: {e}")
+        
     return scraped_articles
 
 def generate_report(articles):
@@ -54,13 +51,13 @@ His engineering focus and specific interests include:
 Review this raw unstructured web data batch:
 {{str(articles)}}
 
-Perform semantic matching. Select the top 3-4 entries that align directly with his interests.
+Perform semantic matching. Select EXACTLY the top 10 entries that align directly with his interests.
 For each matched node, output:
 1. A bolded clean title
 2. A precise, single-sentence summary explaining the practical implication or invention
 3. The absolute URL source link
 
-Format the complete payload in clean Markdown optimized for high readability on a mobile device.
+Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 summaries.
 """
     
     response = client.models.generate_content(
@@ -115,7 +112,7 @@ def send_whatsapp_message(text):
             print(f"Failed to transmit WhatsApp node: {e}")
 
 if __name__ == "__main__":
-    if not all([TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, LLM_API_KEY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, WHATSAPP_TO_NUMBER]):
+    if not all([TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, LLM_API_KEY, NEWS_API_KEY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, WHATSAPP_TO_NUMBER]):
         print("Critical System Invalidation: Environment variables missing.")
         exit(1)
         
