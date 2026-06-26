@@ -36,8 +36,12 @@ def fetch_live_news():
 
 def generate_report(articles):
     print("Initiating semantic analysis via Gemini Client...")
-    # Instantiate the standard SDK Client
     client = genai.Client(api_key=LLM_API_KEY)
+    
+    # Format the input data cleanly so Gemini doesn't get confused by Python dictionaries
+    raw_text = ""
+    for idx, art in enumerate(articles):
+        raw_text += f"Article {idx+1}:\nTitle: {art['title']}\nLink: {art['link']}\nSummary: {art['summary']}\n\n"
     
     prompt = f"""
 You are an autonomous engineering operations agent filtering data for Harsh Mishra.
@@ -48,14 +52,14 @@ His engineering focus and specific interests include:
 - Practical applications of how AI can be helpful in day-to-day life.
 - Advanced Machine Learning, FinTech Quantitative Analytics, and Deep Learning in Healthcare.
 
-Review this raw unstructured web data batch:
-{{str(articles)}}
+Review this raw text batch of news articles:
+{raw_text}
 
 Perform semantic matching. Select EXACTLY the top 10 entries that align directly with his interests.
 For each matched node, output:
 1. A bolded clean title
 2. A precise, single-sentence summary explaining the practical implication or invention
-3. The absolute URL source link (You MUST use the exact URL provided in the 'link' field of the input data. Do not hallucinate URLs or use example.com).
+3. The absolute URL source link (CRITICAL: You MUST copy the exact 'Link:' string provided in the raw text above. Do not invent links).
 
 Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 summaries.
 """
@@ -92,9 +96,9 @@ def send_whatsapp_message(text):
     print("Pushing payload to WhatsApp gateway...")
     url = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json"
     
-    # WhatsApp limits are ~1600 chars
-    if len(text) > 1600:
-        chunks = [text[i:i+1600] for i in range(0, len(text), 1600)]
+    # WhatsApp limits are ~4096 chars. Splitting at 4000 to be safe.
+    if len(text) > 4000:
+        chunks = [text[i:i+4000] for i in range(0, len(text), 4000)]
     else:
         chunks = [text]
         
