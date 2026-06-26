@@ -105,9 +105,9 @@ def send_whatsapp_message(text):
     print("Pushing payload to WhatsApp gateway...")
     url = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json"
     
-    # WhatsApp limits are ~4096 chars. Splitting at 4000 to be safe.
-    if len(text) > 4000:
-        chunks = [text[i:i+4000] for i in range(0, len(text), 4000)]
+    # Twilio API strictly limits message bodies to 1600 characters max, even for WhatsApp.
+    if len(text) > 1500:
+        chunks = [text[i:i+1500] for i in range(0, len(text), 1500)]
     else:
         chunks = [text]
         
