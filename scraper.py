@@ -1,5 +1,7 @@
 import os
 import requests
+import markdown
+from telegraph import Telegraph
 from google import genai
 
 # 1. Environment Injection Validation
@@ -65,12 +67,16 @@ Review this raw text batch of real news articles:
 {raw_text}
 
 Perform semantic matching. Select EXACTLY the top 10 most relevant entries from the list above.
-For each matched node, output:
-1. A bolded clean title
-2. A detailed, informative summary (3-4 sentences long) that provides in-depth knowledge about the article, the specific invention, or the practical implication. Do not give short summaries.
-3. The absolute URL source link (CRITICAL: You MUST copy the exact 'Link:' string provided in the raw text above. Do not invent links).
 
-Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 detailed summaries.
+You must format your response in EXACTLY two sections, separated by the exact text "---REPORT_SEPARATOR---".
+
+Section 1 (Short List):
+A simple, numbered list of the 10 selected articles containing ONLY the bolded title and the absolute URL link. Do not include summaries here.
+
+---REPORT_SEPARATOR---
+
+Section 2 (Detailed Report):
+For each of the 10 articles, provide the bolded title, the link, and a detailed, informative summary (3-4 sentences long) that provides in-depth knowledge about the article, the specific invention, or the practical implication.
 """
     
     response = client.models.generate_content(
@@ -131,9 +137,40 @@ if __name__ == "__main__":
         
     raw_news = fetch_live_news()
     if raw_news:
-        final_report = generate_report(raw_news)
-        send_telegram_message(final_report)
-        send_whatsapp_message(final_report)
+        full_response = generate_report(raw_news)
+        
+        try:
+            short_message, detailed_report = full_response.split("---REPORT_SEPARATOR---")
+        except ValueError:
+            print("Warning: Gemini failed to output the separator. Using full response as short message.")
+            short_message = "Here is your morning briefing:\n"
+            detailed_report = full_response
+            
+        print("Publishing detailed report to Telegraph...")
+        try:
+            tgph = Telegraph()
+            tgph.create_account(short_name='AI Agent')
+            # Telegraph API only accepts basic HTML tags, markdown library handles conversion
+            html_content = markdown.markdown(detailed_report.strip())
+            
+            # Telegraph API crashes if content is missing, so provide fallback
+            if not html_content:
+                html_content = "<p>No detailed report generated.</p>"
+                
+            response = tgph.create_page(
+                'Morning Tech Briefing',
+                html_content=html_content,
+                author_name='AI Ops Agent'
+            )
+            report_url = response['url']
+        except Exception as e:
+            print(f"Telegraph publish failed: {e}")
+            report_url = "Error generating detailed report link."
+            
+        final_payload = f"{short_message.strip()}\n\n📖 *Read Detailed Report Here:* {report_url}"
+        
+        send_telegram_message(final_payload)
+        send_whatsapp_message(final_payload)
         print("Success! Morning intelligence briefing deployed.")
     else:
         print("Processing halted: No upstream articles retrieved.")
