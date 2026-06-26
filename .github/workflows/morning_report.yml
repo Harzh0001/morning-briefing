@@ -2,9 +2,12 @@ name: Morning Tech Report
 
 on:
   schedule:
-    # Trigger fires at exactly 20:30 UTC every day (Translates to 2:00 AM IST)
-    - cron: '30 20 * * *'
+    # Trigger fires at exactly 02:30 UTC every day (Translates to 8:00 AM IST)
+    - cron: '30 2 * * *'
   workflow_dispatch: # Retains a manual override toggle button in the GitHub UI
+
+permissions:
+  contents: write
 
 jobs:
   run-scraper:
@@ -34,3 +37,11 @@ jobs:
           TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
           WHATSAPP_TO_NUMBER: ${{ secrets.WHATSAPP_TO_NUMBER }}
         run: python scraper.py
+
+      - name: Commit and Push Report
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add latest_report.md
+          git commit -m "Automated update of latest_report.md" || echo "No changes to commit"
+          git push
