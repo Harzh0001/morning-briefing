@@ -1,7 +1,5 @@
 import os
 import requests
-import markdown
-from telegraph import Telegraph
 from google import genai
 
 # 1. Environment Injection Validation
@@ -146,27 +144,11 @@ if __name__ == "__main__":
             short_message = "Here is your morning briefing:\n"
             detailed_report = full_response
             
-        print("Publishing detailed report to Telegraph...")
-        try:
-            tgph = Telegraph()
-            tgph.create_account(short_name='AI Agent')
-            # Telegraph API only accepts basic HTML tags, markdown library handles conversion
-            html_content = markdown.markdown(detailed_report.strip())
+        print("Saving detailed report to local markdown file...")
+        with open("latest_report.md", "w", encoding="utf-8") as f:
+            f.write(f"# Detailed Morning Tech Report\n\n{detailed_report.strip()}")
             
-            # Telegraph API crashes if content is missing, so provide fallback
-            if not html_content:
-                html_content = "<p>No detailed report generated.</p>"
-                
-            response = tgph.create_page(
-                'Morning Tech Briefing',
-                html_content=html_content,
-                author_name='AI Ops Agent'
-            )
-            report_url = response['url']
-        except Exception as e:
-            print(f"Telegraph publish failed: {e}")
-            report_url = "Error generating detailed report link."
-            
+        report_url = "https://github.com/Harzh0001/morning-briefing/blob/main/latest_report.md"
         final_payload = f"{short_message.strip()}\n\n📖 *Read Detailed Report Here:* {report_url}"
         
         send_telegram_message(final_payload)

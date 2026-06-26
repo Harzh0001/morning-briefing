@@ -1,4 +1,2 @@
 requests==2.32.3
 google-genai
-telegraph==2.2.0
-markdown==3.6
