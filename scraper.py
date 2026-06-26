@@ -45,13 +45,19 @@ def generate_report(articles):
     prompt = f"""
 You are an autonomous engineering operations agent filtering data for Harsh Mishra.
 
-Review this raw unstructured web data batch:
-{str(articles)}
+His engineering focus and specific interests include:
+- AI-related technologies, particularly autonomous agents (like Hermes agents and similar architectures).
+- Brilliant ideas and cutting-edge inventions regarding AI.
+- Practical applications of how AI can be helpful in day-to-day life.
+- Advanced Machine Learning, FinTech Quantitative Analytics, and Deep Learning in Healthcare.
 
-Perform semantic matching. Select the top 3-4 entries that align directly with his engineering focus.
+Review this raw unstructured web data batch:
+{{str(articles)}}
+
+Perform semantic matching. Select the top 3-4 entries that align directly with his interests.
 For each matched node, output:
 1. A bolded clean title
-2. A precise, single-sentence engineering-focused summary explaining the practical implication
+2. A precise, single-sentence summary explaining the practical implication or invention
 3. The absolute URL source link
 
 Format the complete payload in clean Markdown optimized for high readability on a mobile device.
