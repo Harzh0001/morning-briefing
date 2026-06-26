@@ -55,7 +55,7 @@ Perform semantic matching. Select EXACTLY the top 10 entries that align directly
 For each matched node, output:
 1. A bolded clean title
 2. A precise, single-sentence summary explaining the practical implication or invention
-3. The absolute URL source link
+3. The absolute URL source link (You MUST use the exact URL provided in the 'link' field of the input data. Do not hallucinate URLs or use example.com).
 
 Format the complete payload in clean Markdown optimized for high readability on a mobile device. Ensure you output exactly 10 summaries.
 """
