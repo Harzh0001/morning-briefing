@@ -26,8 +26,8 @@ def fetch_live_news():
     for url in FEEDS:
         try:
             feed = feedparser.parse(url)
-            # Restrict target ingestion to top 4 latest nodes to manage context limits
-            for entry in feed.entries[:4]: 
+            # Restrict target ingestion to top 10 latest nodes to manage context limits
+            for entry in feed.entries[:10]: 
                 scraped_articles.append({
                     "title": entry.title,
                     "link": entry.link,
