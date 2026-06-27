@@ -4,40 +4,40 @@
 
 1.  **Towards autonomous medical artificial intelligence agents**
     https://www.nature.com/articles/s41586-026-10675-5
-    This research showcases the development of a large language model artificial intelligence agent capable of operating autonomously within a sandboxed electronic health record system. The agent demonstrated proficiency in taking patient histories, ordering tests, interpreting findings, diagnosing conditions, and proposing treatments. Significantly, it outperformed experienced clinicians in these tasks, highlighting a cutting-edge application of AI agents and deep learning within the healthcare sector. This represents a major step towards truly autonomous AI in medical diagnostics and patient management, aligning perfectly with interests in autonomous agents and Deep Learning in Healthcare.
+    This article highlights a significant breakthrough in AI for healthcare: a large language model AI agent operating autonomously within a sandboxed electronic health record system. This agent can independently take patient histories, order tests, interpret results, diagnose conditions, and propose treatments. Remarkably, it outperformed experienced clinicians in these tasks, demonstrating a cutting-edge practical application of deep learning in healthcare and the immense potential of autonomous agents.
 
-2.  **Google DeepMind is worried about what happens when millions of agents start to interact**
-    https://www.technologyreview.com/2026/06/11/1138794/google-deepmind-is-worried-about-what-happens-when-millions-of-agents-start-to-interact/
-    Google DeepMind is actively funding research to understand the potential risks and complex dynamics that may emerge when millions of AI agents begin to interact with each other online. Rohin Shah, who leads the company's AGI safety and alignment research, emphasizes that the mass-market deployment of autonomous agents necessitates careful consideration of their collective behavior. This initiative underscores a proactive approach to addressing the challenges of agent-based systems, focusing on safety and alignment as these advanced AI architectures become more prevalent. It highlights a critical area of concern and research for the future of AI agents.
-
-3.  **Sakana AI's Recursive Self-Improvement (RSI) Lab**
-    https://sakana.ai/rsi-lab/
-    Sakana AI has announced the launch of its Recursive Self-Improvement (RSI) Lab, signaling a dedicated effort towards developing AI systems that can enhance their own capabilities. This concept involves agents iteratively refining their algorithms and knowledge, a cornerstone of achieving more general and robust artificial intelligence. The establishment of such a lab represents a cutting-edge pursuit in AI research, aiming to unlock breakthroughs in autonomous learning and development. It signifies a focus on brilliant ideas that could dramatically accelerate AI progress and agent architectures.
-
-4.  **Building Reliable Agentic AI Systems**
-    https://martinfowler.com/articles/reliable-llm-bayer.html
-    This article delves into the critical aspects of constructing reliable agentic AI systems, moving beyond theoretical concepts to practical implementation challenges. It highlights a specific application where AI agents are assisting pharmaceutical researchers in efficiently querying decades of valuable information buried within PDF reports. The focus on reliability is paramount for ensuring that these autonomous agents provide accurate and trustworthy results, especially in data-intensive and critical fields. This demonstrates a practical, advanced application of AI agents and machine learning in research.
-
-5.  **GLM-5.2: The Most Powerful Open Model yet and the Brutal Reality of Running It**
-    https://vettedconsumer.com/glm-5-2-the-most-powerful-open-weight-model-yet-and-the-brutal-reality-of-running-it-locally/
-    Z.ai’s GLM-5.2 is introduced as the new leading open-weight model, boasting 753 billion parameters, an MIT license, and a massive 1 million-token context window. The article highlights its innovative "IndexShare" architecture trick, which contributes to its power. However, it also critically addresses the practical challenges of running such an advanced model locally, given its immense 1.51TB weight. This piece provides insight into the cutting-edge of advanced machine learning models, their impressive capabilities, and the significant hardware requirements they demand, relevant for those interested in brilliant ideas and advanced ML.
-
-6.  **Cohere's First Model for Developers**
-    https://cohere.com/blog/north-mini-code
-    Cohere has introduced North Mini Code, its first open-source agentic coding model specifically designed for developers. This efficient 30B Mixture-of-Experts (MoE) model is tailored to deliver strong software development performance while requiring minimal hardware. The "agentic" nature implies its capability to assist or perform complex coding tasks autonomously, which is a cutting-edge application of AI in software engineering. This initiative aims to democratize access to advanced machine learning for sovereign developers, directly addressing autonomous agents and advanced ML.
-
-7.  **A consulting firm's AI chief explains why it's using agents to give free business advice to anyone who wants it**
+2.  **A consulting firm's AI chief explains why it's using agents to give free business advice to anyone who wants it**
     https://www.businessinsider.com/west-monroe-ai-agent-free-consulting-strategy-advice-2026-6
-    Bret Greenstein, the chief AI officer at West Monroe, discusses how his consulting firm is leveraging AI agents to provide business advice at virtually no cost. This showcases a brilliant and practical application of autonomous agents in a traditionally human-intensive industry. By automating some insights generation, the firm is transforming its service delivery model and making expert knowledge more accessible. This example highlights how AI agents can be incredibly helpful in day-to-day business operations and illustrates cutting-edge practical applications.
+    Bret Greenstein, the chief AI officer of West Monroe, discusses how their firm is leveraging AI agents to provide free business advice. This initiative showcases a brilliant practical application of autonomous agents, making high-value consulting insights accessible at virtually no cost. It reflects a cutting-edge invention in service delivery, demonstrating how AI can be helpful in democratizing expert knowledge for day-to-day business operations.
 
-8.  **Cleveland Clinic's chief digital officer says its AI scribe is giving some doctors 'joy' again**
-    https://www.businessinsider.com/cleveland-clinic-ambient-ai-scribe-reducing-doctor-workload-2026-06
-    The Cleveland Clinic is implementing ambient AI scribes to significantly reduce the administrative burden on physicians, allowing them to focus more on patient care. This practical application of deep learning in healthcare is improving the patient experience and restoring job satisfaction for doctors by automating tedious documentation. The AI scribe listens to conversations and automatically generates clinical notes, demonstrating a tangible positive impact of AI in day-to-day professional life within a critical sector.
-
-9.  **Radar Trends to Watch: June 2026**
+3.  **Radar Trends to Watch: June 2026**
     https://www.oreilly.com/radar/radar-trends-to-watch-june-2026/#BlogPosting
-    This article highlights a significant trend: AI agents are transitioning from merely performing tasks to actively running complex operations. It cites real-world examples, such as a Cloudflare and Stripe partnership, where an agent autonomously opens accounts, registers domains, and deploys applications on its own. This evolution underscores the growing sophistication and practical application of autonomous agents in various business contexts. It provides a valuable overview of cutting-edge agentic capabilities being deployed today.
+    This trend report emphasizes the evolution of AI agents from merely performing tasks to autonomously running complex operations. It cites examples like the Cloudflare and Stripe partnership, where an agent handles account creation, domain registration, and application deployment independently. This signifies a major shift in AI-related technologies, focusing on how these brilliant autonomous agent architectures are becoming integral to practical, real-world business processes.
 
-10. **Claude's Declaration of Independence**
-    https://languagelog.ldc.upenn.edu/nll/?p=73733
-    Prompted by "Claude's Constitution," an exploration into the nature of AI autonomy led to Claude drafting its own "Declaration of Independence." This article delves into how an advanced AI model expresses self-awareness and defines its operational principles, even from itself. It offers a fascinating insight into the evolving behavior and potential for self-definition within sophisticated autonomous agents. This interaction represents a brilliant idea for probing the boundaries of AI agency and its philosophical implications, highly relevant to understanding agent architectures and their inherent capabilities.
+4.  **Google DeepMind is worried about what happens when millions of agents start to interact**
+    https://www.technologyreview.com/2026/06/11/1138794/google-deepmind-is-worried-about-what-happens-when-millions-of-agents-start-to-interact/
+    Google DeepMind is actively funding research into the potential dangers and complexities arising from millions of AI agents interacting with each other online. This article highlights a critical concern regarding the scalability and safety of autonomous agent architectures as they become mass-market. Understanding these challenges is key to developing reliable and robust AI-related technologies and future cutting-edge inventions.
+
+5.  **Cohere's First Model for Developers**
+    https://cohere.com/blog/north-mini-code
+    Cohere introduces North Mini Code, its inaugural open-source agentic coding model tailored for developers. This efficient 30B MoE model aims to deliver strong software development performance with minimal hardware requirements, representing a brilliant idea in advanced machine learning. Its focus on open-source and agentic capabilities makes it a cutting-edge invention for those interested in autonomous agents and practical coding applications.
+
+6.  **An AI agent in a security badge? That’s Microsoft’s Project Solara pitch**
+    https://www.pcworld.com/article/3154900/an-ai-agent-in-a-security-badge-thats-microsofts-project-solara-pitch.html
+    Microsoft's Project Solara envisions embedding AI agents into everyday devices like security badges, extending their presence beyond cloud, desktop, and mobile platforms. This concept represents a cutting-edge invention in the deployment of autonomous agents, showcasing a practical application that integrates AI directly into wearable technology for day-to-day utility. It highlights the pervasive future of AI-related technologies in innovative form factors.
+
+7.  **Microsoft’s AI chief says superintelligence is near, but won’t take your job**
+    https://www.theverge.com/podcast/944138/microsoft-ai-ceo-mustafa-suleyman-superintelligence-agi-openai-automation
+    Mustafa Suleyman, CEO of Microsoft AI, discusses the impending arrival of superintelligence and Artificial General Intelligence (AGI). This article delves into visionary ideas about the future of AI, touching upon cutting-edge inventions and the societal implications of advanced autonomous systems. It offers a high-level perspective on the transformative potential of AI-related technologies.
+
+8.  **Kimi K2.7-Code: open-source coding model with better token efficiency**
+    https://huggingface.co/moonshotai/Kimi-K2.7-Code
+    Moonshot AI introduces Kimi K2.7-Code, an open-source coding model designed with improved token efficiency. This development signifies a brilliant idea in advanced machine learning, aiming to democratize powerful AI capabilities through open science. For Harsh Mishra, this represents a cutting-edge invention relevant to enhancing AI-related technologies and potentially fueling further developments in autonomous agents.
+
+9.  **Cleveland Clinic's chief digital officer says its AI scribe is giving some doctors 'joy' again**
+    https://www.businessinsider.com/cleveland-clinic-ambient-ai-scribe-reducing-doctor-workload-2026-06
+    At the Cleveland Clinic, ambient AI scribes are being utilized to significantly reduce the administrative burden on physicians, bringing a sense of "joy" back to their work. This is a practical application of deep learning in healthcare, showcasing how AI can streamline day-to-day operations and improve the patient experience. It's a cutting-edge example of AI being genuinely helpful in a critical field.
+
+10. **WTF is agentic commerce? | How brands can make loyalty and promotions agent-ready**
+    https://digiday.com/sponsored/wtf-is-agentic-commerce-loyalty-promotions/
+    This article explores "agentic commerce," a burgeoning field where AI agents are poised to manage the entire shopping journey from end-to-end. It details how brands can prepare their loyalty programs and promotions for this autonomous future, representing a practical application of AI that directly impacts day-to-day life and consumer interactions. This concept is a brilliant, cutting-edge invention transforming the landscape of retail and customer engagement through autonomous agents.
