@@ -2,8 +2,8 @@ name: Morning Tech Report
 
 on:
   schedule:
-    # Trigger fires at exactly 02:30 UTC every day (Translates to 8:00 AM IST)
-    - cron: '30 2 * * *'
+    # Trigger fires at exactly 20:30 UTC every day (Translates to 2:00 AM IST)
+    - cron: '30 20 * * *'
   workflow_dispatch: # Retains a manual override toggle button in the GitHub UI
 
 permissions:
