@@ -8,11 +8,35 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 NEWS_API_KEY = os.environ.get("NEWS_API_KEY", "").strip()
 
-def fetch_live_news():
+def generate_search_query():
+    print("Agent thinking: Generating dynamic search query for NewsAPI...")
+    client = genai.Client(api_key=LLM_API_KEY)
+    
+    prompt = """
+    You are an autonomous engineering operations agent filtering data for Harsh Mishra.
+    His interests include: AI-related technologies, autonomous agents (like Hermes), brilliant AI inventions, practical day-to-day AI applications, Advanced Machine Learning, FinTech Quantitative Analytics, and Deep Learning in Healthcare.
+    
+    Generate a SINGLE boolean search query string (using AND / OR / parentheses) optimized for the NewsAPI 'q' parameter that will find the most relevant news today. 
+    Do NOT use quotes in your response. Output ONLY the raw query string. Keep it under 100 characters.
+    Example output: artificial intelligence OR machine learning OR autonomous agents
+    """
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
+        query = response.text.strip()
+        print(f"Agent generated query: {query}")
+        return query
+    except Exception as e:
+        print(f"Agent query generation failed. Falling back to default query. Error: {e}")
+        return "artificial intelligence OR machine learning OR autonomous agents
+
+def fetch_live_news(query):
     print("Initializing NewsAPI ingestion...")
     url = "https://newsapi.org/v2/everything"
     params = {
-        "q": "artificial intelligence OR machine learning OR autonomous agents",
+        "q": query,
         "sortBy": "popularity",  # Use popularity instead of publishedAt to get REAL, reliable sources!
         "language": "en",
         "pageSize": 100,
@@ -78,7 +102,53 @@ For each of the 10 articles, provide the bolded title, the link, and a detailed,
     )
     return response.text
 
-def send_telegram_message(text):
+def publish_to_rentry(markdown_text):
+    print("Publishing detailed report to Rentry.co...")
+    try:
+        url = "https://rentry.co/api/new"
+        payload = {"text": markdown_text}
+        response = requests.post(url, data=payload)
+        response.raise_for_status()
+        data = response.json()
+        if 'url' in data:
+            return data['url']
+        else:
+            print("Rentry API did not return a URL.")
+            return None
+    except Exception as e:
+        print(f"Rentry publish failed: {e}")
+        return None
+
+def heal_payload(broken_payload, error_msg):
+    print("Agent self-healing initiated: Fixing broken payload...")
+    client = genai.Client(api_key=LLM_API_KEY)
+    
+    prompt = f"""
+    You are an autonomous agent fixing a Telegram API delivery failure.
+    The Telegram API rejected the following Markdown payload with this error:
+    {error_msg}
+    
+    Broken Payload:
+    {broken_payload}
+    
+    Fix the Markdown syntax (e.g., escape special characters if necessary, fix unclosed tags, or simplify the formatting) so that Telegram accepts it.
+    Output ONLY the fixed payload text. Do not wrap it in markdown code blocks.
+    """
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"Self-healing failed: {e}")
+        return broken_payload
+
+def send_telegram_message(text, retries=0):
+    if retries > 2:
+        print("Max retries exceeded. Agent failed to self-heal payload.")
+        return
+        
     print("Pushing payload to production communication gateway...")
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     
@@ -98,7 +168,17 @@ def send_telegram_message(text):
             res = requests.post(url, json=payload)
             res.raise_for_status()
         except Exception as e:
-            print(f"Failed to transmit payload node: {e}")
+            error_msg = str(e)
+            try:
+                error_msg = res.json().get('description', str(e))
+            except:
+                pass
+            print(f"Failed to transmit payload node: {error_msg}")
+            
+            # Initiate self-healing loop
+            fixed_chunk = heal_payload(chunk, error_msg)
+            # Recursively retry with the healed payload
+            send_telegram_message(fixed_chunk, retries=retries+1)
 
 
 
@@ -107,7 +187,8 @@ if __name__ == "__main__":
         print("Critical System Invalidation: Environment variables missing.")
         exit(1)
         
-    raw_news = fetch_live_news()
+    query = generate_search_query()
+    raw_news = fetch_live_news(query)
     if raw_news:
         full_response = generate_report(raw_news)
         
@@ -118,11 +199,15 @@ if __name__ == "__main__":
             short_message = "Here is your morning briefing:\n"
             detailed_report = full_response
             
-        print("Saving detailed report to local markdown file...")
-        with open("latest_report.md", "w", encoding="utf-8") as f:
-            f.write(f"# Detailed Morning Tech Report\n\n{detailed_report.strip()}")
+        full_markdown = f"# Detailed Morning Tech Report\n\n{detailed_report.strip()}"
+        
+        report_url = publish_to_rentry(full_markdown)
+        if not report_url:
+            print("Fallback: Saving to local markdown file due to Rentry failure.")
+            with open("latest_report.md", "w", encoding="utf-8") as f:
+                f.write(full_markdown)
+            report_url = "https://github.com/Harzh0001/morning-briefing/blob/main/latest_report.md"
             
-        report_url = "https://github.com/Harzh0001/morning-briefing/blob/main/latest_report.md"
         final_payload = f"{short_message.strip()}\n\n📖 *Read Detailed Report Here:* {report_url}"
         
         send_telegram_message(final_payload)
