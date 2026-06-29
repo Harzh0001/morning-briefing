@@ -30,7 +30,7 @@ def generate_search_query():
         return query
     except Exception as e:
         print(f"Agent query generation failed. Falling back to default query. Error: {e}")
-        return "artificial intelligence OR machine learning OR autonomous agents
+        return "artificial intelligence OR machine learning OR autonomous agents"
 
 def fetch_live_news(query):
     print("Initializing NewsAPI ingestion...")
